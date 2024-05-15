@@ -6,7 +6,7 @@ function BigNavbar() {
   return (
     <Wrapper className="nav-center">
       <Logo />
-      <NavLinks />
+      <NavLinks direction={"row"} />
 
       {/* btns container */}
       <div className="btns-container">

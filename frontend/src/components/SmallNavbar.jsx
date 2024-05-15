@@ -3,10 +3,10 @@ import styled from "styled-components";
 import { FaBars } from "react-icons/fa";
 import Logo from "./Logo";
 
-function SmallNavbar() {
+function SmallNavbar({ openSidebar }) {
   return (
     <Wrapper className="nav-center">
-      <button className="hamburger">
+      <button className="hamburger" onClick={openSidebar}>
         <FaBars />
       </button>
       <Logo />
@@ -20,15 +20,6 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  .hamburger {
-    border: none;
-    background-color: transparent;
-    font-size: 1.5rem;
-    padding: 0;
-    display: flex;
-    cursor: pointer;
-  }
 
   @media only screen and (min-width: 700px) {
     // hide the smallNavbar > 700px

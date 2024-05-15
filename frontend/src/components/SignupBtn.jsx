@@ -1,20 +1,26 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
-function SignupBtn() {
-  return <Wrapper>signup</Wrapper>;
+function SignupBtn({ sidebarBtn }) {
+  return (
+    <Wrapper sidebarBtn={sidebarBtn} className="btn">
+      signup
+    </Wrapper>
+  );
 }
 
 // button
 const Wrapper = styled.button`
-  font-size: 0.9rem;
-  text-transform: capitalize;
   padding: 0.55em 1em;
   border: 1px solid;
-  cursor: pointer;
-  background-color: #4548dde3;
   background-color: transparent;
-  /* color: #fff; */
-  border-radius: 0.2em;
+
+  ${(props) =>
+    props.sidebarBtn &&
+    css`
+      border: none;
+      padding: 0;
+      margin-top: 0.5em;
+    `}
 `;
 export default SignupBtn;

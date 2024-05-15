@@ -5,6 +5,8 @@ import LoginBtn from "./LoginBtn";
 import SignupBtn from "./SignupBtn";
 import SmallNavbar from "./SmallNavbar";
 import LandingHero from "./LandingHero";
+import LandingFeatured from "./LandingFeatured";
+import Sidebar from "./Sidebar";
 
 export {
   Logo,
@@ -14,4 +16,6 @@ export {
   SignupBtn,
   SmallNavbar,
   LandingHero,
+  LandingFeatured,
+  Sidebar,
 };

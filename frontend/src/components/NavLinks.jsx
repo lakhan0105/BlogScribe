@@ -2,9 +2,9 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
-function NavLinks() {
+function NavLinks({ direction }) {
   return (
-    <Wrapper>
+    <Wrapper direction={direction}>
       <NavLink>About</NavLink>
       <NavLink>Write</NavLink>
     </Wrapper>
@@ -14,8 +14,8 @@ function NavLinks() {
 // Navlinks-container-div styled components
 const Wrapper = styled.div`
   display: flex;
+  flex-direction: ${(props) => (props.direction === "row" ? "row" : "column")};
 
-  /* navlink */
   a {
     margin-right: 1em;
   }

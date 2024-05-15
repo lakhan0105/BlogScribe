@@ -1,8 +1,8 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
-function LoginBtn() {
-  return <Wrapper>login</Wrapper>;
+function LoginBtn({ sidebarBtn }) {
+  return <Wrapper sidebarBtn={sidebarBtn}>login</Wrapper>;
 }
 
 // button
@@ -13,9 +13,15 @@ const Wrapper = styled.button`
   text-transform: capitalize;
   background-color: transparent;
   border-radius: 0.2em;
-  /* border: 1px solid #1b1f2326; */
   border: none;
   margin-right: 0.5em;
+
+  ${(props) =>
+    props.sidebarBtn &&
+    css`
+      padding: 0;
+      margin: 0;
+    `}
 `;
 
 export default LoginBtn;

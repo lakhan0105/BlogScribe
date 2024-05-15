@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { FaAngleRight, FaAngleLeft } from "react-icons/fa";
 
@@ -41,6 +41,12 @@ function LandingHero() {
     }
   }
 
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     nextSlide();
+  //   }, 10000);
+  // }, [currItem]);
+
   return (
     <Wrapper>
       <div className="slider">
@@ -74,7 +80,8 @@ function LandingHero() {
 
 // landing hero
 const Wrapper = styled.section`
-  /* background-color: #fff; */
+  margin-bottom: 2em;
+  transition: all 0.3s ease-in-out;
 
   .slider {
     border-radius: 0.5em;
@@ -99,6 +106,7 @@ const Wrapper = styled.section`
     right: 0;
     height: 100%;
     z-index: 2;
+    transition: all 0.3s ease-in-out;
   }
 
   // overlay
