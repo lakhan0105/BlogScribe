@@ -1,5 +1,4 @@
 import React from "react";
-
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -7,15 +6,55 @@ import {
   RouterProvider,
 } from "react-router-dom";
 
-import { Landing, Home, RootLayout } from "./pages/index";
+import {
+  Landing,
+  Home,
+  RootLayout,
+  Register,
+  Login,
+  ProtectedRoutes,
+  PublicRoutes,
+} from "./pages/index";
 
 // router
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<RootLayout />}>
-      <Route index element={<Home />} />
-      <Route path="landing" element={<Landing />} />
-    </Route>
+    <>
+      <Route path="/" element={<RootLayout />}>
+        <Route
+          index
+          element={
+            <ProtectedRoutes>
+              <Home />
+            </ProtectedRoutes>
+          }
+        />
+        <Route
+          path="landing"
+          element={
+            <PublicRoutes>
+              <Landing />
+            </PublicRoutes>
+          }
+        />
+        <Route
+          path="register"
+          element={
+            <PublicRoutes>
+              <Register />
+            </PublicRoutes>
+          }
+        />
+        <Route
+          path="login"
+          element={
+            <PublicRoutes>
+              <Login />
+            </PublicRoutes>
+          }
+        />
+      </Route>
+    </>
   )
 );
 

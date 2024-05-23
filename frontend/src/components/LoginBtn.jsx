@@ -1,8 +1,18 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import { NavLink } from "react-router-dom";
 import styled, { css } from "styled-components";
 
-function LoginBtn({ sidebarBtn }) {
-  return <Wrapper sidebarBtn={sidebarBtn}>login</Wrapper>;
+function LoginBtn({ $sidebarBtn }) {
+  const { user } = useSelector((state) => state.userReducer);
+
+  if (!user) {
+    return (
+      <Wrapper $sidebarBtn={$sidebarBtn}>
+        <NavLink to={"/login"}>login</NavLink>
+      </Wrapper>
+    );
+  }
 }
 
 // button
@@ -17,7 +27,7 @@ const Wrapper = styled.button`
   margin-right: 0.5em;
 
   ${(props) =>
-    props.sidebarBtn &&
+    props.$sidebarBtn &&
     css`
       padding: 0;
       margin: 0;

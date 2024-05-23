@@ -41,11 +41,11 @@ function LandingHero() {
     }
   }
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     nextSlide();
-  //   }, 10000);
-  // }, [currItem]);
+  useEffect(() => {
+    setTimeout(() => {
+      nextSlide();
+    }, 2000);
+  }, [currItem]);
 
   return (
     <Wrapper>

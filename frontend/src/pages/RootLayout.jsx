@@ -23,6 +23,7 @@ function RootLayout() {
       </nav>
 
       <Sidebar closeSidebar={closeSidebar} sidebarStatus={sidebarStatus} />
+
       <Outlet />
     </>
   );

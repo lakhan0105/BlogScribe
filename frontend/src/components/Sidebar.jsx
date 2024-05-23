@@ -4,8 +4,12 @@ import Logo from "./Logo";
 import NavLinks from "./NavLinks";
 import LoginBtn from "./LoginBtn";
 import SignupBtn from "./SignupBtn";
+import LogoutBtn from "./LogoutBtn";
+import { useSelector } from "react-redux";
 
 function Sidebar({ sidebarStatus, closeSidebar }) {
+  const { user } = useSelector((state) => state.userReducer);
+
   return (
     <Wrapper className={sidebarStatus ? "" : "hide"}>
       <header className="header">
@@ -19,8 +23,13 @@ function Sidebar({ sidebarStatus, closeSidebar }) {
         <NavLinks direction={"column"} />
 
         <div className="btn-links-cont">
-          <LoginBtn sidebarBtn={true} />
-          <SignupBtn sidebarBtn={true} />
+          {user && <LogoutBtn />}
+
+          {!user && (
+            <>
+              <LoginBtn /> <SignupBtn />
+            </>
+          )}
         </div>
       </div>
     </Wrapper>

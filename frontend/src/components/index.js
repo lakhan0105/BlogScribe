@@ -7,6 +7,8 @@ import SmallNavbar from "./SmallNavbar";
 import LandingHero from "./LandingHero";
 import LandingFeatured from "./LandingFeatured";
 import Sidebar from "./Sidebar";
+import FormInput from "./FormInput";
+import LogoutBtn from "./LogoutBtn";
 
 export {
   Logo,
@@ -18,4 +20,6 @@ export {
   LandingHero,
   LandingFeatured,
   Sidebar,
+  FormInput,
+  LogoutBtn,
 };

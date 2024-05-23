@@ -52,14 +52,14 @@ img {
   cursor: pointer;
   text-transform: capitalize;
   border-radius: 0.2em;
+  font-family: "Roboto", sans-serif;
 }
 
 /* BODY */
 body {
   background-color: #f5f5f5;
   position: relative;
-  /* font-family: "Roboto", sans-serif; */
-  font-family: "Merriweather", serif;
+  font-family: "Roboto", sans-serif;
 }
 
 /* NAVBAR */
@@ -70,6 +70,7 @@ body {
   z-index: 100;
   right: 0;
   left: 0;
+  font-family: "Merriweather", serif;
 }
 
 /* CLASSES */

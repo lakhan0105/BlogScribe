@@ -1,8 +1,11 @@
 import React from "react";
 import styled from "styled-components";
-import { LoginBtn, Logo, NavLinks, SignupBtn } from "./index";
+import { LoginBtn, Logo, LogoutBtn, NavLinks, SignupBtn } from "./index";
+import { useSelector } from "react-redux";
 
 function BigNavbar() {
+  const { user } = useSelector((state) => state.userReducer);
+
   return (
     <Wrapper className="nav-center">
       <Logo />
@@ -10,8 +13,14 @@ function BigNavbar() {
 
       {/* btns container */}
       <div className="btns-container">
-        <LoginBtn />
-        <SignupBtn />
+        {/* if user then show logout btn */}
+        {user && <LogoutBtn />}
+
+        {!user && (
+          <>
+            <LoginBtn /> <SignupBtn />
+          </>
+        )}
       </div>
     </Wrapper>
   );
