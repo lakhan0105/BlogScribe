@@ -9,6 +9,10 @@ import LandingFeatured from "./LandingFeatured";
 import Sidebar from "./Sidebar";
 import FormInput from "./FormInput";
 import LogoutBtn from "./LogoutBtn";
+import BlogCards from "./BlogCards";
+import FeaturedBlogs from "./FeaturedBlogs";
+import FeaturedCard from "./FeaturedCard";
+import FilterBtns from "./FilterBtns";
 
 export {
   Logo,
@@ -22,4 +26,8 @@ export {
   Sidebar,
   FormInput,
   LogoutBtn,
+  BlogCards,
+  FeaturedBlogs,
+  FeaturedCard,
+  FilterBtns,
 };

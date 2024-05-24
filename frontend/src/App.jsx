@@ -14,6 +14,7 @@ import {
   Login,
   ProtectedRoutes,
   PublicRoutes,
+  SingleBlog,
 } from "./pages/index";
 
 // router
@@ -29,6 +30,9 @@ const router = createBrowserRouter(
             </ProtectedRoutes>
           }
         />
+
+        <Route path="/singleblog/:id" element={<SingleBlog />} />
+
         <Route
           path="landing"
           element={
