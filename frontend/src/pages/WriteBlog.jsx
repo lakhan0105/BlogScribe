@@ -3,23 +3,26 @@ import styled from "styled-components";
 import { Editor } from "@tinymce/tinymce-react";
 import constants from "../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
-import { nanoid } from "nanoid";
+import { v4 as uuidv4 } from "uuid";
+
 import { addBlog } from "../features/blog/blogSlice";
+import { useNavigate } from "react-router-dom";
 
 function WriteBlog() {
   // setup editorRef
   const editorRef = useRef(null);
   const { user } = useSelector((state) => state.userReducer);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const initialVal = {
-    id: nanoid(),
+    id: uuidv4(),
     user_id: user.user_id,
     title: "",
     content: null,
     img_url: "",
     category: "",
-    isFeatured: "",
+    is_featured: false,
   };
 
   const [blogData, setBlogData] = useState(initialVal);
@@ -29,7 +32,11 @@ function WriteBlog() {
     // if editor instance is present
     if (editorRef.current) {
       setBlogData((prev) => {
-        return { ...prev, content: editorRef.current.getContent() };
+        return {
+          ...prev,
+          id: uuidv4(),
+          content: editorRef.current.getContent(),
+        };
       });
     }
   };
@@ -44,11 +51,18 @@ function WriteBlog() {
   }
 
   // handleSubmit
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     log();
-    console.log(blogData);
-    dispatch(addBlog(blogData));
+
+    try {
+      dispatch(addBlog(blogData));
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (

@@ -2,31 +2,35 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import { BlogCards, FeaturedBlogs, FilterBtns } from "../components";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllBlogs } from "../features/blog/blogSlice";
+import { getAllBlogs, getFeaturedBlogs } from "../features/blog/blogSlice";
 
 function Home() {
   const { user } = useSelector((state) => state.userReducer);
-  const { allBlogs } = useSelector((state) => state.blogReducer);
+  const { allBlogs, isLoading, featuredBlogs } = useSelector(
+    (state) => state.blogReducer
+  );
   const dispatch = useDispatch();
+  console.log(featuredBlogs);
 
   useEffect(() => {
     if (user) {
       dispatch(getAllBlogs());
+      dispatch(getFeaturedBlogs());
     }
   }, [user]);
 
   return (
     <Wrapper className="page-center">
       <FilterBtns />
-      <BlogCards blogs={allBlogs} />
-      <FeaturedBlogs />
+      <BlogCards blogs={allBlogs} isLoading={isLoading} />
+      <FeaturedBlogs featuredBlogs={featuredBlogs} isLoading={isLoading} />
     </Wrapper>
   );
 }
 
 const Wrapper = styled.section`
-  display: grid;
-  grid-template-columns: auto 1fr auto;
+  display: flex;
+
   /* gap: 2em; */
   font-family: "Merriweather", serif;
 `;

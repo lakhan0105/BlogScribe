@@ -38,7 +38,6 @@ export const loginUser = createAsyncThunk(
         "/auth/v1/token?grant_type=password",
         obj
       );
-      // console.log(resp);
       const { access_token, refresh_token, expires_at, user } = resp?.data;
       const { user_metadata, id: user_id } = user;
       return {

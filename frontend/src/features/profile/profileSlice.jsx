@@ -15,6 +15,7 @@ export const getProfileById = createAsyncThunk(
       const resp = await custFetch(
         `/rest/v1/profiles?id=eq.${user_id}&select=*`
       );
+
       return resp.data[0];
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
@@ -33,7 +34,7 @@ export const profileSlice = createSlice({
       })
       .addCase(getProfileById.fulfilled, (state, { payload }) => {
         state.isLoading = false;
-        state.profiles[payload.id] = payload;
+        state.profiles[payload?.id] = payload;
       })
       .addCase(getProfileById.rejected, (state, { payload }) => {
         state.isLoading = false;

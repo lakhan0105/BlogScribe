@@ -6,7 +6,7 @@ import AuthorInfo from "./AuthorInfo";
 const data = [
   {
     id: "1",
-    user_id: "15949cdd-f14a-4f35-a8fa-3a333b597f5a",
+    user_id: "e410e6c3-c33d-4c0c-9366-9eb772fad28f",
     created_at: "2024-05-23T10:00:00Z",
     title: "Exploring the Mountains",
     content:
@@ -36,12 +36,16 @@ const data = [
   },
 ];
 
-function BlogCards({ blogs }) {
+function BlogCards({ blogs, isLoading }) {
+  if (isLoading) {
+    return <h2>loading...</h2>;
+  }
+
   return (
     <Wrapper>
       <h1 className="section-title">All blogs</h1>
 
-      {data.map((blog) => {
+      {blogs?.map((blog) => {
         const { id, user_id, title, content, img_url, category } = blog;
 
         return (

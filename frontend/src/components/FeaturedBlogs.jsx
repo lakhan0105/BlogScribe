@@ -35,12 +35,16 @@ const data = [
   },
 ];
 
-function FeaturedBlogs() {
+function FeaturedBlogs({ featuredBlogs, isLoading }) {
+  if (isLoading) {
+    return <h2>loading...</h2>;
+  }
+
   return (
     <Wrapper>
       <h3 className="section-title">Featured Blogs</h3>
 
-      {data.map((blog) => {
+      {featuredBlogs?.map((blog) => {
         const { id, title } = blog;
         return <FeaturedCard key={id} {...blog} />;
       })}

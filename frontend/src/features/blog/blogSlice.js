@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import custFetch from "../../utils/custFetch";
 import constants from "../../utils/constants";
+import { useNavigate } from "react-router-dom";
 
 const initialState = {
   isLoading: false,
@@ -19,7 +20,7 @@ export const getAllBlogs = createAsyncThunk(
           Authorization: `Bearer ${constants.supabaseApiKey}`,
         },
       });
-      console.log(data);
+      // console.log(data);
       return data;
     } catch (error) {
       console.log(error);
@@ -28,21 +29,40 @@ export const getAllBlogs = createAsyncThunk(
   }
 );
 
+// getFeaturedBlogs
+export const getFeaturedBlogs = createAsyncThunk(
+  "blog/getFeaturedBlogs",
+  async (_, thunkAPI) => {
+    try {
+      const { data } = await custFetch.get(
+        `/rest/v1/blogs?is_featured=eq.true&select=*`,
+        {
+          headers: {
+            Authorization: `Bearer ${constants.supabaseApiKey}`,
+          },
+        }
+      );
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
 // addBlog
 export const addBlog = createAsyncThunk(
   "blog/addBlog",
   async (obj, thunkAPI) => {
-    console.log(obj);
     try {
-      const resp = await custFetch.post(`/rest/v1/blogs`, {
+      const resp = await custFetch.post(`/rest/v1/blogs`, obj, {
         headers: {
           Authorization: `Bearer ${constants.supabaseApiKey}`,
           Prefer: `return=minimal`,
         },
-        obj,
       });
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data);
+      console.log(error);
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
@@ -57,7 +77,7 @@ export const blogSlice = createSlice({
       })
       .addCase(getAllBlogs.fulfilled, (state, { payload }) => {
         state.isLoading = false;
-        console.log(payload);
+        // console.log(payload);
         state.allBlogs = payload;
       })
       .addCase(getAllBlogs.rejected, (state, { payload }) => {
@@ -72,8 +92,19 @@ export const blogSlice = createSlice({
       })
       .addCase(addBlog.rejected, (state, { payload }) => {
         state.isLoading = false;
-        alert(payload);
         console.log(payload);
+        alert(payload);
+      })
+      .addCase(getFeaturedBlogs.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getFeaturedBlogs.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.featuredBlogs = payload;
+      })
+      .addCase(getFeaturedBlogs.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        alert(payload);
       });
   },
 });
