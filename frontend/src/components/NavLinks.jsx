@@ -6,7 +6,7 @@ function NavLinks({ direction }) {
   return (
     <Wrapper direction={direction}>
       <NavLink>About</NavLink>
-      <NavLink>Write</NavLink>
+      <NavLink to={"writeblog"}>Write</NavLink>
     </Wrapper>
   );
 }

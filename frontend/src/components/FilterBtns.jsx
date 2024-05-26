@@ -33,8 +33,8 @@ function FilterBtns() {
   return (
     <Wrapper>
       {/* <h2 className="section-title">#filters</h2> */}
-      {data.map((btn) => {
-        return <button>{btn}</button>;
+      {data.map((btn, index) => {
+        return <button key={index}>{btn}</button>;
       })}
     </Wrapper>
   );

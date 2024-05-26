@@ -1,11 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import AuthorInfo from "./AuthorInfo";
 
 const data = [
   {
     id: "1",
-    user_id: "1001",
+    user_id: "15949cdd-f14a-4f35-a8fa-3a333b597f5a",
     created_at: "2024-05-23T10:00:00Z",
     title: "Exploring the Mountains",
     content:
@@ -15,7 +16,7 @@ const data = [
   },
   {
     id: "2",
-    user_id: "1002",
+    user_id: "7137552f-aed0-4304-be01-0184a4085f67",
     created_at: "2024-05-22T15:30:00Z",
     title: "A Day at the Beach",
     content:
@@ -25,7 +26,7 @@ const data = [
   },
   {
     id: "3",
-    user_id: "1003",
+    user_id: "e410e6c3-c33d-4c0c-9366-9eb772fad28f",
     created_at: "2024-05-21T08:45:00Z",
     title: "City Lights",
     content:
@@ -46,7 +47,8 @@ function BlogCards({ blogs }) {
         return (
           <article className="blog-card" key={id}>
             {/* meta info */}
-            <div className="meta-info">{user_id}</div>
+            {/* <div className="meta-info">{user_id}</div> */}
+            <AuthorInfo id={user_id} />
 
             {/* info */}
             <div className="info">

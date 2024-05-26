@@ -13,6 +13,7 @@ import BlogCards from "./BlogCards";
 import FeaturedBlogs from "./FeaturedBlogs";
 import FeaturedCard from "./FeaturedCard";
 import FilterBtns from "./FilterBtns";
+import AuthorInfo from "./AuthorInfo";
 
 export {
   Logo,
@@ -30,4 +31,5 @@ export {
   FeaturedBlogs,
   FeaturedCard,
   FilterBtns,
+  AuthorInfo,
 };

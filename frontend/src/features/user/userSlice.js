@@ -40,12 +40,13 @@ export const loginUser = createAsyncThunk(
       );
       // console.log(resp);
       const { access_token, refresh_token, expires_at, user } = resp?.data;
-      const { user_metadata } = user;
+      const { user_metadata, id: user_id } = user;
       return {
         access_token,
         refresh_token,
         expires_at,
         ...user_metadata,
+        user_id,
       };
     } catch (error) {
       console.log(error);

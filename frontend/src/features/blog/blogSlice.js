@@ -28,6 +28,25 @@ export const getAllBlogs = createAsyncThunk(
   }
 );
 
+// addBlog
+export const addBlog = createAsyncThunk(
+  "blog/addBlog",
+  async (obj, thunkAPI) => {
+    console.log(obj);
+    try {
+      const resp = await custFetch.post(`/rest/v1/blogs`, {
+        headers: {
+          Authorization: `Bearer ${constants.supabaseApiKey}`,
+          Prefer: `return=minimal`,
+        },
+        obj,
+      });
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const blogSlice = createSlice({
   name: "blog",
   initialState,
@@ -43,6 +62,17 @@ export const blogSlice = createSlice({
       })
       .addCase(getAllBlogs.rejected, (state, { payload }) => {
         state.isLoading = true;
+        console.log(payload);
+      })
+      .addCase(addBlog.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(addBlog.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+      })
+      .addCase(addBlog.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        alert(payload);
         console.log(payload);
       });
   },

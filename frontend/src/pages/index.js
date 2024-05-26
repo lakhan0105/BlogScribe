@@ -6,6 +6,8 @@ import Register from "./Register";
 import ProtectedRoutes from "./ProtectedRoutes";
 import PublicRoutes from "./PublicRoutes";
 import SingleBlog from "./SingleBlog";
+import SingleProfile from "./SingleProfile";
+import WriteBlog from "./WriteBlog";
 
 export {
   Landing,
@@ -16,4 +18,6 @@ export {
   ProtectedRoutes,
   PublicRoutes,
   SingleBlog,
+  SingleProfile,
+  WriteBlog,
 };

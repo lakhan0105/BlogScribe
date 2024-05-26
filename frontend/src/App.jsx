@@ -15,6 +15,8 @@ import {
   ProtectedRoutes,
   PublicRoutes,
   SingleBlog,
+  SingleProfile,
+  WriteBlog,
 } from "./pages/index";
 
 // router
@@ -32,6 +34,7 @@ const router = createBrowserRouter(
         />
 
         <Route path="/singleblog/:id" element={<SingleBlog />} />
+        <Route path="singleprofile/:user_id" element={<SingleProfile />} />
 
         <Route
           path="landing"
@@ -41,6 +44,7 @@ const router = createBrowserRouter(
             </PublicRoutes>
           }
         />
+
         <Route
           path="register"
           element={
@@ -49,12 +53,22 @@ const router = createBrowserRouter(
             </PublicRoutes>
           }
         />
+
         <Route
           path="login"
           element={
             <PublicRoutes>
               <Login />
             </PublicRoutes>
+          }
+        />
+
+        <Route
+          path="writeblog"
+          element={
+            <ProtectedRoutes>
+              <WriteBlog />
+            </ProtectedRoutes>
           }
         />
       </Route>
