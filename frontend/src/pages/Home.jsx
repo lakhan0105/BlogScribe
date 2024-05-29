@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { BlogCards, FeaturedBlogs, FilterBtns } from "../components";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllBlogs, getFeaturedBlogs } from "../features/blog/blogSlice";
+import BlogsContainer from "../components/BlogsContainer";
 
 function Home() {
   const { user } = useSelector((state) => state.userReducer);
@@ -10,7 +11,6 @@ function Home() {
     (state) => state.blogReducer
   );
   const dispatch = useDispatch();
-  console.log(featuredBlogs);
 
   useEffect(() => {
     if (user) {
@@ -22,7 +22,10 @@ function Home() {
   return (
     <Wrapper className="page-center">
       <FilterBtns />
-      <BlogCards blogs={allBlogs} isLoading={isLoading} />
+
+      {/* BLOGS CONTAINER */}
+      <BlogsContainer allBlogs={allBlogs} />
+
       <FeaturedBlogs featuredBlogs={featuredBlogs} isLoading={isLoading} />
     </Wrapper>
   );
@@ -33,6 +36,9 @@ const Wrapper = styled.section`
 
   /* gap: 2em; */
   font-family: "Merriweather", serif;
+
+  .blogs-container {
+  }
 `;
 
 export default Home;

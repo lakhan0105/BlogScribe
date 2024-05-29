@@ -1,6 +1,14 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import custFetch from "../../utils/custFetch";
-import { addUserLS, getUserLS } from "../../utils/localStorage";
+import { addUserLS, getUserLS, removeUserLS } from "../../utils/localStorage";
+import constants from "../../utils/constants";
+
+// appwrite
+import { Client, Account, ID, Databases } from "appwrite";
+const client = new Client()
+  .setEndpoint(constants.appwriteEndpoint) // Your API Endpoint
+  .setProject(constants.appwriteProjectId);
+const account = new Account(client);
+const databases = new Databases(client);
 
 // initial state
 const initialState = {
@@ -11,20 +19,25 @@ const initialState = {
 // registerUser
 export const registerUser = createAsyncThunk(
   "user/registerUser",
-  async ({ first_name, email, password, username }, thunkAPI) => {
+  async (values, thunkAPI) => {
+    const { userId, email, first_name: name, password } = values;
     try {
-      const resp = await custFetch.post("/auth/v1/signup", {
-        email,
-        password,
-        data: {
-          first_name,
-          username,
-        },
-      });
-      return resp.data;
+      const resp = await account.create(userId, email, password, name);
+      thunkAPI.dispatch(
+        createUserDoc({ userId, email, userName: name, userImg: "" })
+      );
+      alert("registered successfully!");
+      return resp;
     } catch (error) {
-      console.log(error);
-      return thunkAPI.rejectWithValue(error?.response);
+      if (error.response.code === 409) {
+        console.log("user with same credentials already exisits!");
+        return;
+      }
+      if (error.response.code === 429) {
+        console.log("rate limit exeeded! Please wait for sometime!");
+        return;
+      }
+      return thunkAPI.rejectWithValue(error?.response || error);
     }
   }
 );
@@ -32,28 +45,63 @@ export const registerUser = createAsyncThunk(
 // loginUser
 export const loginUser = createAsyncThunk(
   "user/loginUser",
-  async (obj, thunkAPI) => {
+  async ({ email, password }, thunkAPI) => {
     try {
-      const resp = await custFetch.post(
-        "/auth/v1/token?grant_type=password",
-        obj
-      );
-      const { access_token, refresh_token, expires_at, user } = resp?.data;
-      const { user_metadata, id: user_id } = user;
-      return {
-        access_token,
-        refresh_token,
-        expires_at,
-        ...user_metadata,
-        user_id,
-      };
+      const resp = await account.createEmailPasswordSession(email, password);
+      thunkAPI.dispatch(getCurrUser());
+      return resp;
     } catch (error) {
       console.log(error);
-      if (error.response.data.status === 400) {
-        return thunkAPI.rejectWithValue("Invalid credentials");
-      } else {
-        return thunkAPI.rejectWithValue(error.response.data.error);
+      if (error.response.code === 401) {
+        alert("invalid credentials!");
+        return;
       }
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+// getCurrUser
+export const getCurrUser = createAsyncThunk(
+  "user/getCurrUser",
+  async (_, thunkAPI) => {
+    try {
+      const resp = await account.get();
+      return resp;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+// logout user
+export const logoutUser = createAsyncThunk(
+  "user/logoutUser",
+  async (_, thunkAPI) => {
+    try {
+      const resp = await account.deleteSessions();
+      return resp;
+    } catch (error) {
+      console.log(error);
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+// createUserDoc -> creates a row in the users collection in the database
+export const createUserDoc = createAsyncThunk(
+  "user/createUserDoc",
+  async (obj, thunkAPI) => {
+    try {
+      const resp = await databases.createDocument(
+        constants.appwriteDatabaseId,
+        constants.appwriteUsersCollectionId,
+        ID.unique(),
+        obj
+      );
+      return resp;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
@@ -70,31 +118,56 @@ export const userSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, { payload }) => {
         state.isLoading = false;
-        const user = payload.user_metadata;
-        state.user = user;
-        addUserLS(user);
-        console.log(payload);
       })
       .addCase(registerUser.rejected, (state, { payload }) => {
         state.isLoading = true;
-
-        // check error for too many requests
-        if (payload.status === 429) {
-          alert("429:too many email requests, please wait for some time!");
-        }
+        console.log(payload);
+        alert(payload);
       })
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(loginUser.fulfilled, (state, { payload }) => {
         state.isLoading = false;
-        console.log(payload);
-        state.user = payload;
-        addUserLS(payload);
       })
       .addCase(loginUser.rejected, (state, { payload }) => {
         state.isLoading = false;
         alert(payload);
+      })
+      .addCase(getCurrUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getCurrUser.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        console.log(payload);
+        state.user = payload;
+        addUserLS(payload);
+      })
+      .addCase(getCurrUser.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        alert(payload);
+      })
+      .addCase(logoutUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(logoutUser.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.user = null;
+        removeUserLS();
+      })
+      .addCase(logoutUser.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        alert(payload);
+      })
+      .addCase(createUserDoc.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(createUserDoc.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+      })
+      .addCase(createUserDoc.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        console.log(payload);
       });
   },
 });

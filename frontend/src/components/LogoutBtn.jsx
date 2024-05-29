@@ -1,8 +1,21 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
+import { logoutUser } from "../features/user/userSlice";
 
 function LogoutBtn() {
-  return <Wrapper className="btn">logout</Wrapper>;
+  const dispatch = useDispatch();
+
+  function handleLogout() {
+    console.log("handle logout");
+    dispatch(logoutUser());
+  }
+
+  return (
+    <Wrapper className="btn" onClick={handleLogout}>
+      logout
+    </Wrapper>
+  );
 }
 
 // Styling

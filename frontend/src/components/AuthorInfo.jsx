@@ -12,7 +12,7 @@ function AuthorInfo({ id }) {
   // we need 2 useEffects beacuse, if we include both in same useEffect, we will get inifinite network calls as getProfileById() will trigger whenever the profile changes and it is a ininite loop. we need the dispatch to run only when the id changes.
   useEffect(() => {
     dispatch(getProfileById(id));
-  }, [dispatch, id]);
+  }, [id]);
 
   useEffect(() => {
     setCurrAuth(profiles[id]);
@@ -22,18 +22,18 @@ function AuthorInfo({ id }) {
     return <h2>loading...</h2>;
   }
 
-  const { avatar_url, first_name, id: user_id, username } = currAuth;
+  const { $id, userId, userName, userImg, email } = currAuth;
 
   return (
     <Wrapper>
-      <Link to={`singleprofile/${user_id}`}>
-        <div className="img-container">
-          <img src={avatar_url} alt="not found" />
+      <Link to={`singleprofile/${userId}`}>
+        <div className="user-img-container">
+          <img src={userImg} alt="not found" />
         </div>
       </Link>
 
-      <Link to={`singleprofile/${user_id}`}>
-        <p>{username}</p>
+      <Link to={`singleprofile/${userId}`}>
+        <p>{userName}</p>
       </Link>
     </Wrapper>
   );
@@ -47,13 +47,14 @@ const Wrapper = styled.div`
   margin-bottom: 0.6em;
   font-family: "Roboto", sans-serif;
 
-  .img-container {
+  .user-img-container {
     width: 25px;
     height: 25px;
     border: 1px solid;
     border-radius: 1em;
     margin-left: 0;
     margin-right: 0.4em;
+    overflow: hidden;
   }
 
   p {

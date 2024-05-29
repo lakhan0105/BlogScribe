@@ -1,6 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import custFetch from "../../utils/custFetch";
 
+import { Client, Databases, Query } from "appwrite";
+import constants from "../../utils/constants";
+const client = new Client()
+  .setEndpoint(constants.appwriteEndpoint) // Your API Endpoint
+  .setProject(constants.appwriteProjectId); // Your project ID
+const databases = new Databases(client);
+
 // initialState
 const initialState = {
   profiles: {},
@@ -10,15 +17,16 @@ const initialState = {
 // getProfileById
 export const getProfileById = createAsyncThunk(
   "profile/getProfileById",
-  async (user_id, thunkAPI) => {
+  async (userId, thunkAPI) => {
     try {
-      const resp = await custFetch(
-        `/rest/v1/profiles?id=eq.${user_id}&select=*`
+      const resp = await databases.listDocuments(
+        constants.appwriteDatabaseId,
+        constants.appwriteUsersCollectionId,
+        [Query.equal("userId", [userId])]
       );
-
-      return resp.data[0];
+      return resp;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data);
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
@@ -34,11 +42,11 @@ export const profileSlice = createSlice({
       })
       .addCase(getProfileById.fulfilled, (state, { payload }) => {
         state.isLoading = false;
-        state.profiles[payload?.id] = payload;
+        state.profiles[payload?.documents[0]?.userId] = payload?.documents[0];
       })
       .addCase(getProfileById.rejected, (state, { payload }) => {
         state.isLoading = false;
-        alert(payload);
+        alert("error from getProfileById", payload);
       });
   },
 });

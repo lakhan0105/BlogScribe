@@ -46,8 +46,9 @@ function Login() {
           name={"password"}
           handleChange={handleChange}
         />
+
         <button className="btn" type="submit">
-          submit
+          login
         </button>
       </form>
     </Wrapper>
@@ -55,8 +56,8 @@ function Login() {
 }
 
 const Wrapper = styled.div`
-  border: 1px solid;
-  background-color: rebeccapurple;
+  /* background-color: #ecdcce; */
+
   min-height: 100vh;
 
   h2 {
@@ -68,8 +69,8 @@ const Wrapper = styled.div`
     width: 100%;
     max-width: 400px;
     margin: 0 auto;
-    padding: 2em 0.5em;
-    border-radius: 0.2em;
+    padding: 3em 0.5em;
+    border-radius: 0.4em;
     margin-top: 5em;
     text-align: center;
   }

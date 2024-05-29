@@ -3,10 +3,12 @@ import styled from "styled-components";
 import { FormInput } from "../components";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../features/user/userSlice";
-import { redirect, useNavigate } from "react-router-dom";
+import { Link, redirect, useNavigate } from "react-router-dom";
 import { nanoid } from "@reduxjs/toolkit";
+import { ID } from "appwrite";
 
 const initialState = {
+  userId: ID.unique(),
   first_name: "",
   email: "",
   password: "",
@@ -20,15 +22,6 @@ function Register() {
     return state.userReducer;
   });
 
-  // run this whenever the user changes
-  useEffect(() => {
-    setTimeout(() => {
-      if (user) {
-        return navigate("/", { replace: true });
-      }
-    }, 1000);
-  }, [user]);
-
   // handleChange
   function handleChange(e) {
     const key = e.target.name;
@@ -40,7 +33,7 @@ function Register() {
   }
 
   // handleSubmit
-  function handleSubmit(e) {
+  const handleSubmit = (e) => {
     e.preventDefault();
     const { first_name, email, password } = values;
 
@@ -50,9 +43,14 @@ function Register() {
       return;
     }
 
-    // call the registerUser
-    dispatch(registerUser({ first_name, email, password, username: nanoid() }));
-  }
+    // check password length
+    if (password.length < 8 || password.length > 256) {
+      alert("passwords must be b/t 8-256 chars!");
+      return;
+    }
+
+    dispatch(registerUser(values));
+  };
 
   // loading
   if (isLoading) {
@@ -81,8 +79,9 @@ function Register() {
           name={"password"}
           handleChange={handleChange}
         />
+
         <button className="btn" type="submit">
-          submit
+          signup
         </button>
       </form>
     </Wrapper>
@@ -91,8 +90,7 @@ function Register() {
 
 // styling
 const Wrapper = styled.div`
-  border: 1px solid;
-  background-color: rebeccapurple;
+  /* border: 1px solid; */
   min-height: 100vh;
 
   h2 {
@@ -105,9 +103,9 @@ const Wrapper = styled.div`
     max-width: 400px;
     margin: 0 auto;
     padding: 2em 0.5em;
-    border-radius: 0.2em;
     margin-top: 5em;
     text-align: center;
+    border-radius: 0.4em;
   }
 
   button {

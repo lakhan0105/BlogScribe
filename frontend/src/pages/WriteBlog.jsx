@@ -1,11 +1,11 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { Editor } from "@tinymce/tinymce-react";
 import constants from "../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
-import { v4 as uuidv4 } from "uuid";
+import { ID } from "appwrite";
 
-import { addBlog } from "../features/blog/blogSlice";
+import { createBlog, createBlogImg } from "../features/blog/blogSlice";
 import { useNavigate } from "react-router-dom";
 
 function WriteBlog() {
@@ -16,30 +16,45 @@ function WriteBlog() {
   const navigate = useNavigate();
 
   const initialVal = {
-    id: uuidv4(),
-    user_id: user.user_id,
+    userId: user.$id,
     title: "",
     content: null,
-    img_url: "",
+    blog_img: ID.unique(),
     category: "",
     is_featured: false,
   };
 
   const [blogData, setBlogData] = useState(initialVal);
+  const [contentData, setContentData] = useState("");
 
   // function that runs getContent and sets it in editorRef
   const log = () => {
     // if editor instance is present
     if (editorRef.current) {
-      setBlogData((prev) => {
-        return {
-          ...prev,
-          id: uuidv4(),
-          content: editorRef.current.getContent(),
-        };
+      const content = editorRef.current.getContent();
+      setContentData(() => {
+        return content;
       });
     }
   };
+
+  // function to create a desc from contentData
+  function createDesc() {
+    const div = document.createElement("div");
+    div.innerHTML = contentData;
+    const paras = div.querySelector("p")?.textContent;
+    const desc = paras?.substring(0, 100);
+    return desc;
+  }
+
+  // save the contentData in blogData
+  useEffect(() => {
+    console.log("inside contentData useeffect");
+    const desc = createDesc();
+    setBlogData((prev) => {
+      return { ...prev, content: contentData, desc };
+    });
+  }, [contentData]);
 
   // handleChange
   function handleChange(e) {
@@ -51,15 +66,17 @@ function WriteBlog() {
   }
 
   // handleSubmit
-  async function handleSubmit(e) {
+  function handleSubmit(e) {
     e.preventDefault();
     log();
 
     try {
-      dispatch(addBlog(blogData));
+      dispatch(createBlog(blogData));
+      dispatch(createBlogImg(blogData.blog_img));
       setTimeout(() => {
+        // console.log(blogData);
         navigate("/");
-      }, 2000);
+      }, 3000);
     } catch (error) {
       console.log(error);
     }
@@ -81,10 +98,11 @@ function WriteBlog() {
           />
           <input
             className="image"
+            id="uploader"
             type="file"
-            name="img_url"
+            name="blog_img"
             accept="image/*"
-            onChange={handleChange}
+            // onChange={handleChange}
           />
         </div>
 
@@ -99,6 +117,7 @@ function WriteBlog() {
                 "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat",
             }}
             initialValue="type the content here"
+            onChange={log}
           />
         </div>
 

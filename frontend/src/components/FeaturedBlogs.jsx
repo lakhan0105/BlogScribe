@@ -45,7 +45,7 @@ function FeaturedBlogs({ featuredBlogs, isLoading }) {
       <h3 className="section-title">Featured Blogs</h3>
 
       {featuredBlogs?.map((blog) => {
-        const { id, title } = blog;
+        const { $id: id, content, title, userId } = blog;
         return <FeaturedCard key={id} {...blog} />;
       })}
     </Wrapper>

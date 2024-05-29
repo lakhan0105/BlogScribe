@@ -9,7 +9,7 @@ import LandingFeatured from "./LandingFeatured";
 import Sidebar from "./Sidebar";
 import FormInput from "./FormInput";
 import LogoutBtn from "./LogoutBtn";
-import BlogCards from "./BlogCards";
+import BlogCards from "./BlogCard";
 import FeaturedBlogs from "./FeaturedBlogs";
 import FeaturedCard from "./FeaturedCard";
 import FilterBtns from "./FilterBtns";
