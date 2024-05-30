@@ -2,15 +2,16 @@ import React from "react";
 import styled from "styled-components";
 import BlogCard from "./BlogCard";
 
-function BlogsContainer({ allBlogs }) {
+function BlogsContainer({ blogsData, filterTitle }) {
   // if no blogs is present
-  if (allBlogs?.length < 1) {
+  if (blogsData?.length < 1) {
     return <h2>No Blogs to display</h2>;
   }
 
   return (
     <Wrapper>
-      {allBlogs?.map((blog) => {
+      <h2 className="section-title">{filterTitle} blogs</h2>
+      {blogsData?.map((blog) => {
         return <BlogCard key={blog.$id} {...blog} />;
       })}
     </Wrapper>
@@ -19,8 +20,13 @@ function BlogsContainer({ allBlogs }) {
 
 const Wrapper = styled.div`
   width: 100%;
-  max-width: 600px;
+  max-width: 700px;
   margin: 0 auto;
+  font-family: "Roboto", sans-serif;
+
+  .section-title {
+    text-transform: capitalize;
+  }
 `;
 
 export default BlogsContainer;

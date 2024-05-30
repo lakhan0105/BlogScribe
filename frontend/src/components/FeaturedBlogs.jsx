@@ -45,8 +45,10 @@ function FeaturedBlogs({ featuredBlogs, isLoading }) {
       <h3 className="section-title">Featured Blogs</h3>
 
       {featuredBlogs?.map((blog) => {
-        const { $id: id, content, title, userId } = blog;
-        return <FeaturedCard key={id} {...blog} />;
+        {
+          !blog && <h2>Loading...</h2>;
+        }
+        return <FeaturedCard key={blog?.$id} {...blog} />;
       })}
     </Wrapper>
   );
@@ -56,16 +58,21 @@ function FeaturedBlogs({ featuredBlogs, isLoading }) {
 const Wrapper = styled.div`
   margin-top: 0.2em;
   display: none;
-  max-width: 200px;
+  max-width: 250px;
+  background-color: #fff;
+  padding: 1em;
+  border-radius: 0.3em;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05), 0 6px 20px rgba(0, 0, 0, 0.05);
+  font-family: "Roboto", sans-serif;
 
   .section-title {
     font-size: 1.4rem;
-    margin-bottom: 1.3em;
+    margin-bottom: 0.4em;
   }
 
   @media only screen and (min-width: 700px) {
     display: block;
-    margin-left: 2em;
+    margin-left: 1em;
   }
 `;
 

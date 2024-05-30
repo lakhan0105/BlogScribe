@@ -14,10 +14,13 @@ const storage = new Storage(client);
 const initialState = {
   isLoading: false,
   allBlogs: null,
+  currBlog: null,
   totalAllBlogs: null,
   featuredBlogs: null,
   categories: null,
   blogImages: {},
+  filterBtns: [],
+  blogsByCategories: [],
 };
 
 // getAllBlogs
@@ -32,6 +35,23 @@ export const getAllBlogs = createAsyncThunk(
       return resp; // returns {documents,total}
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+// getBlog
+export const getBlog = createAsyncThunk(
+  "blog/getBlog",
+  async (blogId, thunkAPI) => {
+    try {
+      const resp = await databases.getDocument(
+        constants.appwriteDatabaseId,
+        constants.appwriteBlogsCollectionId,
+        blogId
+      );
+      return resp;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
@@ -98,28 +118,12 @@ export const createBlogImg = createAsyncThunk(
   }
 );
 
-// getBlogImg
-export const getBlogImg = createAsyncThunk(
-  "blog/getBlogImg",
-  async (fileId, thunkAPI) => {
-    try {
-      const resp = await storage.getFile(
-        constants.appwriteBlogImagesBucketId,
-        fileId
-      );
-      return resp;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error);
-    }
-  }
-);
-
 // getBlogImgPreview
 export const getBlogImgPreview = (fileId) => {
   try {
     return storage.getFilePreview(constants.appwriteBlogImagesBucketId, fileId);
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return;
   }
 };
@@ -127,6 +131,15 @@ export const getBlogImgPreview = (fileId) => {
 export const blogSlice = createSlice({
   name: "blog",
   initialState,
+  reducers: {
+    filterByCategories: (state, { payload }) => {
+      state.blogsByCategories = state.allBlogs.filter((blog) => {
+        if (blog.category.includes(payload.toLowerCase())) {
+          return blog;
+        }
+      });
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getAllBlogs.pending, (state) => {
@@ -137,6 +150,20 @@ export const blogSlice = createSlice({
         const { documents, total } = payload;
         state.allBlogs = documents;
         state.totalAllBlogs = total;
+
+        // create filter buttons from categories array present in documents
+        const cat = documents?.reduce(
+          (acc, curr) => {
+            curr?.category?.forEach((item) => {
+              if (!acc.includes(item)) {
+                acc.push(item);
+              }
+            });
+            return acc;
+          },
+          ["all"]
+        );
+        state.filterBtns = cat;
       })
       .addCase(getAllBlogs.rejected, (state, { payload }) => {
         state.isLoading = true;
@@ -147,7 +174,6 @@ export const blogSlice = createSlice({
       })
       .addCase(createBlog.fulfilled, (state, { payload }) => {
         state.isLoading = false;
-        // state.allBlogs = payload;
         alert("blog created successfully!");
       })
       .addCase(createBlog.rejected, (state, { payload }) => {
@@ -160,7 +186,6 @@ export const blogSlice = createSlice({
       })
       .addCase(getFeaturedBlogs.fulfilled, (state, { payload }) => {
         state.isLoading = false;
-        // console.log(payload);
         const { documents, total } = payload;
         state.featuredBlogs = documents;
       })
@@ -178,15 +203,14 @@ export const blogSlice = createSlice({
         state.isLoading = false;
         alert("error from createBlogImg", payload);
       })
-      .addCase(getBlogImg.pending, (state) => {
+      .addCase(getBlog.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getBlogImg.fulfilled, (state, { payload }) => {
+      .addCase(getBlog.fulfilled, (state, { payload }) => {
         state.isLoading = false;
-
-        console.log(payload);
+        state.currBlog = payload;
       })
-      .addCase(getBlogImg.rejected, (state, { payload }) => {
+      .addCase(getBlog.rejected, (state, { payload }) => {
         state.isLoading = false;
         alert("error from getBlogImg", payload);
       });
@@ -194,3 +218,4 @@ export const blogSlice = createSlice({
 });
 
 export default blogSlice.reducer;
+export const { filterByCategories } = blogSlice.actions;

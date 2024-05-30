@@ -1,17 +1,25 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { BlogCards, FeaturedBlogs, FilterBtns } from "../components";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllBlogs, getFeaturedBlogs } from "../features/blog/blogSlice";
+import {
+  // filterBtns,
+  filterByCategories,
+  getAllBlogs,
+  getFeaturedBlogs,
+} from "../features/blog/blogSlice";
 import BlogsContainer from "../components/BlogsContainer";
 
 function Home() {
-  const { user } = useSelector((state) => state.userReducer);
-  const { allBlogs, isLoading, featuredBlogs } = useSelector(
-    (state) => state.blogReducer
-  );
+  const [blogsData, setBlogsData] = useState(null);
+  const [filterTitle, setFilterTitle] = useState("all");
   const dispatch = useDispatch();
 
+  const { user } = useSelector((state) => state.userReducer);
+  const { allBlogs, isLoading, featuredBlogs, blogsByCategories, filterBtns } =
+    useSelector((state) => state.blogReducer);
+
+  // call the getAllBlogs and getFeaturedBlogs on initial render
   useEffect(() => {
     if (user) {
       dispatch(getAllBlogs());
@@ -19,12 +27,34 @@ function Home() {
     }
   }, [user]);
 
+  // set the blogsData and also update the blogsData based on the filters
+  useEffect(() => {
+    if (filterTitle === "all") {
+      setBlogsData(allBlogs);
+    } else {
+      setBlogsData(blogsByCategories);
+    }
+  }, [filterTitle, allBlogs, blogsByCategories]);
+
+  // handleFilter
+  function handleFilter(e) {
+    const filterName = e.target.name;
+    setFilterTitle(filterName); // sets dynamic filter name
+
+    if (e.target.name === "all") {
+      setBlogsData(allBlogs);
+    } else {
+      dispatch(filterByCategories(filterName)); // after dispatch, the useEffect will run
+      console.log(blogsData);
+    }
+  }
+
   return (
     <Wrapper className="page-center">
-      <FilterBtns />
+      <FilterBtns filterBtns={filterBtns} handleFilter={handleFilter} />
 
       {/* BLOGS CONTAINER */}
-      <BlogsContainer allBlogs={allBlogs} />
+      <BlogsContainer blogsData={blogsData} filterTitle={filterTitle} />
 
       <FeaturedBlogs featuredBlogs={featuredBlogs} isLoading={isLoading} />
     </Wrapper>
@@ -32,10 +62,13 @@ function Home() {
 }
 
 const Wrapper = styled.section`
-  display: flex;
+  /* display: flex; */
+  /* align-items: start; */
+  /* font-family: "Merriweather", serif; */
 
-  /* gap: 2em; */
-  font-family: "Merriweather", serif;
+  display: grid;
+  grid-template-columns: 200px 1fr 250px;
+  align-items: start;
 
   .blogs-container {
   }

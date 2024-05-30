@@ -47,11 +47,13 @@ function BlogCard({ $id, userId, title, content, desc, blog_img, category }) {
 
 // Styles
 const Wrapper = styled.article`
-  border: 1px solid #d8d8d8;
-  border-radius: 0.2em;
+  /* border: 1px solid #d8d8d8; */
+  border-radius: 0.3em;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05), 0 6px 20px rgba(0, 0, 0, 0.05);
   background-color: #fff;
   padding: 1em;
-  margin-top: 1.5em;
+  /* margin-top: 1.5em; */
+  margin-top: 1em;
   font-family: "Merriweather", serif;
 
   .meta-info {
@@ -60,13 +62,16 @@ const Wrapper = styled.article`
   }
 
   .info {
+    /* border: 1px solid; */
     display: flex;
+    align-items: center;
     justify-content: space-between;
   }
 
   .title {
     font-size: 1.5rem;
     margin-bottom: 0.3em;
+    color: #292929;
   }
 
   .desc {
@@ -75,10 +80,10 @@ const Wrapper = styled.article`
 
   .blog-img-container {
     width: 100px;
-    height: 100px;
-    margin-left: 0.7em;
-    border-radius: 0.2em;
-    overflow: hidden;
+    max-height: 80px;
+    margin-left: 1em;
+    /* overflow: hidden; */
+    /* object-fit: cover; */
   }
 
   button {

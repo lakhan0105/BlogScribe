@@ -1,41 +1,19 @@
 import React from "react";
 import styled from "styled-components";
 
-const data = [
-  "All",
-  "Technology",
-  "Health",
-  "Finance",
-  "Lifestyle",
-  "Travel",
-  "Education",
-  "Entertainment",
-  "Sports",
-  "Business",
-  "Food",
-  "DIY",
-  "Science",
-  "Art",
-  "Fashion",
-  "News",
-  "Reviews",
-  "Opinion",
-  "Interviews",
-  "Guides",
-  "Tips",
-  "Tutorials",
-  "Trending",
-  "Latest",
-  "Popular",
-];
-
-function FilterBtns() {
+function FilterBtns({ filterBtns, handleFilter }) {
   return (
     <Wrapper>
-      {/* <h2 className="section-title">#filters</h2> */}
-      {data.map((btn, index) => {
-        return <button key={index}>{btn}</button>;
-      })}
+      {/* <h2 className="section-title">filters</h2> */}
+      <div className="filter-btns">
+        {filterBtns?.map((btn, index) => {
+          return (
+            <button key={index} name={btn} onClick={handleFilter}>
+              #{btn}
+            </button>
+          );
+        })}
+      </div>
     </Wrapper>
   );
 }
@@ -45,23 +23,34 @@ const Wrapper = styled.div`
   margin-top: 3.5em;
   margin-right: 1em;
   font-family: "Roboto", sans-serif;
-  max-width: 150px;
+  width: 200px;
   display: none;
 
   .section-title {
     margin-bottom: 0.5em;
-    font-size: 1.2rem;
+    font-size: 1.5rem;
+  }
+
+  .filter-btns {
+    /* display: flex; */
   }
 
   button {
-    margin-right: 0.3em;
-    margin-bottom: 0.3em;
-    font-size: 0.9rem;
+    margin-bottom: 0.5em;
+    font-size: 1rem;
     cursor: pointer;
     font-family: "Roboto", sans-serif;
     padding: 0.1em 0.2em;
     border: 1px solid #cecdcd;
     border-radius: 0.2em;
+    display: block;
+    border: none;
+    background-color: transparent;
+    text-transform: capitalize;
+  }
+
+  button:hover {
+    text-decoration: underline;
   }
 
   button:hover {

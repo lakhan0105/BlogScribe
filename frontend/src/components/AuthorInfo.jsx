@@ -46,6 +46,7 @@ const Wrapper = styled.div`
   justify-content: flex-start;
   margin-bottom: 0.6em;
   font-family: "Roboto", sans-serif;
+  font-weight: 500;
 
   .user-img-container {
     width: 25px;
