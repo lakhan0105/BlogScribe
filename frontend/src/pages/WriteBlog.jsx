@@ -74,7 +74,6 @@ function WriteBlog() {
       dispatch(createBlog(blogData));
       dispatch(createBlogImg(blogData.blog_img));
       setTimeout(() => {
-        // console.log(blogData);
         navigate("/");
       }, 3000);
     } catch (error) {

@@ -9,6 +9,8 @@ const constants = {
   appwriteBlogsCollectionId: import.meta.env.VITE_APPWRITE_BLOGS_COLLECTION_ID,
   appwriteBlogImagesBucketId: import.meta.env
     .VITE_APPWRITE_BLOG_IMAGES_BUCKET_ID,
+  appwriteUserImagesBucketId: import.meta.env
+    .VITE_APPWRITE_USER_IMAGES_BUCKET_ID,
 };
 
 export default constants;

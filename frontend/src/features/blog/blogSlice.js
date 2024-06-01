@@ -123,7 +123,6 @@ export const getBlogImgPreview = (fileId) => {
   try {
     return storage.getFilePreview(constants.appwriteBlogImagesBucketId, fileId);
   } catch (error) {
-    // console.log(error);
     return;
   }
 };

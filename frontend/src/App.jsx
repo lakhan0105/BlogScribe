@@ -34,7 +34,8 @@ const router = createBrowserRouter(
         />
 
         <Route path="/singleblog/:id" element={<SingleBlog />} />
-        <Route path="singleprofile/:user_id" element={<SingleProfile />} />
+        <Route path="singleprofile/:userId" element={<SingleProfile />} />
+        {/* <Route path=""/> */}
 
         <Route
           path="landing"

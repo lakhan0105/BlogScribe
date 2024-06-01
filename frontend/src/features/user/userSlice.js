@@ -3,12 +3,13 @@ import { addUserLS, getUserLS, removeUserLS } from "../../utils/localStorage";
 import constants from "../../utils/constants";
 
 // appwrite
-import { Client, Account, ID, Databases } from "appwrite";
+import { Client, Account, ID, Databases, Storage } from "appwrite";
 const client = new Client()
   .setEndpoint(constants.appwriteEndpoint) // Your API Endpoint
   .setProject(constants.appwriteProjectId);
 const account = new Account(client);
 const databases = new Databases(client);
+const storage = new Storage(client);
 
 // initial state
 const initialState = {
@@ -105,6 +106,15 @@ export const createUserDoc = createAsyncThunk(
     }
   }
 );
+
+export const getUserImgPreview = (fileId) => {
+  try {
+    return storage.getFilePreview(constants.appwriteUserImagesBucketId, fileId);
+  } catch (error) {
+    console.log(error);
+    return;
+  }
+};
 
 // userSlice
 export const userSlice = createSlice({

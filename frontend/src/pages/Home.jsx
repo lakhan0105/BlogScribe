@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { BlogCards, FeaturedBlogs, FilterBtns } from "../components";
+import {
+  BlogCards,
+  FeaturedBlogs,
+  FilterBtns,
+  HomeProfileCard,
+} from "../components";
 import { useDispatch, useSelector } from "react-redux";
 import {
   // filterBtns,
@@ -51,7 +56,10 @@ function Home() {
 
   return (
     <Wrapper className="page-center">
-      <FilterBtns filterBtns={filterBtns} handleFilter={handleFilter} />
+      <div>
+        <HomeProfileCard currUserId={user?.targets[0]?.userId} />
+        <FilterBtns filterBtns={filterBtns} handleFilter={handleFilter} />
+      </div>
 
       {/* BLOGS CONTAINER */}
       <BlogsContainer blogsData={blogsData} filterTitle={filterTitle} />
@@ -62,16 +70,8 @@ function Home() {
 }
 
 const Wrapper = styled.section`
-  /* display: flex; */
-  /* align-items: start; */
-  /* font-family: "Merriweather", serif; */
-
-  display: grid;
-  grid-template-columns: 200px 1fr 250px;
+  display: flex;
   align-items: start;
-
-  .blogs-container {
-  }
 `;
 
 export default Home;

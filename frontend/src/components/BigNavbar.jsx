@@ -31,6 +31,9 @@ const Wrapper = styled.div`
   // hide the BigNavbar by default
   display: none;
 
+  .btns-container {
+  }
+
   @media only screen and (min-width: 700px) {
     display: flex;
     width: 100%;

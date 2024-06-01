@@ -12,6 +12,7 @@ const initialState = {
   first_name: "",
   email: "",
   password: "",
+  userImg: "665967f500393bde05c0",
 };
 
 function Register() {
